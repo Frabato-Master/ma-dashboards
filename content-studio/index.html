@@ -702,6 +702,89 @@ body {
   .pipe-dot svg { width: 14px; height: 14px; }
   .pipe-arrow { width: 16px; }
 }
+
+/* ═══ MODAL ═══ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  padding: 24px;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  max-width: 520px;
+  width: 100%;
+  position: relative;
+}
+
+.modal h3 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.modal p {
+  font-size: 13px;
+  color: var(--t2);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.modal-code {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 12px;
+  color: var(--gold);
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-bottom: 20px;
+  user-select: all;
+  line-height: 1.6;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--t3);
+  cursor: pointer;
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: var(--deep);
+  color: var(--t1);
+}
 </style>
 </head>
 <body>
@@ -961,43 +1044,53 @@ body {
       </div>
     </div>
 
-    <!-- BLOCK 5: FILES + PUBLISH -->
+    <!-- BLOCK 5: REVIEW + APPROVE -->
     <div class="card accent-sage">
       <div class="card-title">
         <div class="icon-wrap sage">
-          <svg fill="none" stroke="var(--sage)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <svg fill="none" stroke="var(--sage)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
-        Готовые файлы
+        Согласование
       </div>
 
-      <table class="files-table">
-        <thead>
-          <tr>
-            <th>Видео</th>
-            <th>MP4</th>
-            <th>Обложка</th>
-            <th>Тексты</th>
-            <th>Статус</th>
-          </tr>
-        </thead>
-        <tbody id="filesBody">
-          <tr>
-            <td style="color:var(--t3); font-size:12px;" colspan="5">Нет готовых файлов</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="publish-buttons">
-        <button class="btn-gold" onclick="publishYouTube()" style="flex:1;">
-          <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          YouTube
-        </button>
-        <button class="btn-disabled" style="flex:1;" disabled>Instagram</button>
-        <button class="btn-disabled" style="flex:1;" disabled>TikTok</button>
+      <div id="reviewEmpty" style="color:var(--t3); font-size:12px; padding: 16px 0;">
+        Нет файлов для согласования. Запустите pipeline.
       </div>
 
-      <div style="margin-top: 16px;">
-        <button class="btn-outline" onclick="publishAll()" style="width:100%;">Опубликовать всё в YouTube</button>
+      <div id="reviewContent" style="display:none;">
+        <!-- Status badge -->
+        <div id="reviewStatus" style="display:inline-block; padding:4px 14px; border-radius:8px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:16px; background:var(--gold-dim); color:var(--gold); border:1px solid var(--gold);">
+          Ожидает согласования
+        </div>
+
+        <!-- Video preview -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:700; color:var(--t3); text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px;">Видео</div>
+          <video id="reviewVideo" controls playsinline style="width:100%; max-height:300px; border-radius:10px; background:#000;"></video>
+          <div id="reviewVideoInfo" style="font-size:11px; color:var(--t3); margin-top:4px;"></div>
+        </div>
+
+        <!-- Cover preview -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:700; color:var(--t3); text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px;">Обложка</div>
+          <img id="reviewCover" style="width:100%; max-height:200px; object-fit:contain; border-radius:10px; background:var(--deep);" alt="Cover preview">
+        </div>
+
+        <!-- Description preview -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:700; color:var(--t3); text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px;">YouTube описание</div>
+          <textarea id="reviewYoutubeDesc" style="width:100%; min-height:80px; background:var(--deep); border:1px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--t1); font-family:'Manrope',sans-serif; font-size:12px; resize:vertical; outline:none;"></textarea>
+          <div id="reviewYoutubeCount" style="font-size:11px; color:var(--t3); margin-top:2px; text-align:right;"></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <button class="btn-gold" onclick="approveAndPublish()" style="flex:2;">
+            <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="16" height="16"><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Одобрить и опубликовать
+          </button>
+          <button class="btn-outline" onclick="rejectReview()" style="flex:1;">Отклонить</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1058,6 +1151,20 @@ body {
     Двигаемся дальше. <span>1.61</span>
   </div>
 
+</div>
+
+<!-- MODAL: Pipeline command -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h3 id="modalTitle">Задача сохранена</h3>
+    <p id="modalText">Откройте терминал и выполните:</p>
+    <div class="modal-code" id="modalCode"></div>
+    <button class="btn-gold" onclick="copyModalCommand()" id="modalCopyBtn">
+      <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Копировать команду
+    </button>
+  </div>
 </div>
 
 <!-- TOAST -->
@@ -1149,23 +1256,154 @@ function createImpulse() {
   const cfg = DURATION_MAP[duration] || DURATION_MAP['short'];
 
   const json = {
-    type: 'impulse',
-    title: title,
+    topic: title,
     description: desc,
     theme: getRadio('impulseTheme'),
     duration: duration,
-    format: cfg.format,
-    publishType: cfg.pubType,
     voiceover: isChecked('impulseVoice'),
-    maxDuration: cfg.maxDuration,
-    created: new Date().toISOString()
   };
 
-  navigator.clipboard.writeText(JSON.stringify(json, null, 2))
-    .then(() => showToast('JSON скопирован в буфер'))
-    .catch(() => showToast('Ошибка копирования'));
+  // Save as current-task.json content
+  const jsonStr = JSON.stringify(json, null, 2);
+  const pipelineCmd = 'cd C:\\Users\\danti\\Projects\\ma-content-studio\nnode scripts/full-pipeline.js content-plan/current-task.json';
+  const dryRunCmd = 'cd C:\\Users\\danti\\Projects\\ma-content-studio\nnode scripts/full-pipeline.js --dry-run content-plan/current-task.json';
+
+  // Show modal with commands
+  showModal(
+    'Задача создана',
+    'Сохраните JSON в content-plan/current-task.json и запустите pipeline:',
+    pipelineCmd,
+    jsonStr
+  );
 
   setPipelineStage('script', 'wip');
+}
+
+/* ═══ MODAL ═══ */
+function showModal(title, text, command, jsonContent) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalText').textContent = text;
+  document.getElementById('modalCode').textContent = command;
+  document.getElementById('modalCopyBtn').textContent = 'Копировать команду';
+  document.getElementById('modalCopyBtn').classList.remove('copied');
+
+  // Store data for copy
+  window._modalCommand = command;
+  window._modalJson = jsonContent;
+
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function copyModalCommand() {
+  const text = window._modalCommand || '';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('modalCopyBtn');
+    btn.textContent = 'Скопировано!';
+    setTimeout(() => { btn.textContent = 'Копировать команду'; }, 2000);
+
+    // Also copy JSON to clipboard after command
+    if (window._modalJson) {
+      showToast('Команда скопирована. JSON тоже в буфере.');
+    }
+  });
+}
+
+/* ═══ REVIEW / APPROVAL ═══ */
+function loadManifest() {
+  // In a browser context, we can't read local files.
+  // This function is called manually or checks for manifest data in localStorage.
+  const stored = localStorage.getItem('ma_manifest');
+  if (!stored) return;
+
+  try {
+    const manifest = JSON.parse(stored);
+    showReview(manifest);
+  } catch {}
+}
+
+function showReview(manifest) {
+  document.getElementById('reviewEmpty').style.display = 'none';
+  document.getElementById('reviewContent').style.display = 'block';
+
+  // Status
+  const statusEl = document.getElementById('reviewStatus');
+  if (manifest.status === 'pending_approval') {
+    statusEl.textContent = 'Ожидает согласования';
+    statusEl.style.background = 'var(--gold-dim)';
+    statusEl.style.color = 'var(--gold)';
+    statusEl.style.borderColor = 'var(--gold)';
+  } else if (manifest.status === 'published') {
+    statusEl.textContent = 'Опубликовано';
+    statusEl.style.background = 'var(--sage-dim)';
+    statusEl.style.color = 'var(--sage)';
+    statusEl.style.borderColor = 'var(--sage)';
+  } else if (manifest.status === 'rejected') {
+    statusEl.textContent = 'Отклонено';
+    statusEl.style.background = 'var(--rose-dim)';
+    statusEl.style.color = 'var(--rose)';
+    statusEl.style.borderColor = 'var(--rose)';
+  }
+
+  // Video preview (file:// won't work in browser, show path)
+  const videoEl = document.getElementById('reviewVideo');
+  const videoInfo = document.getElementById('reviewVideoInfo');
+  if (manifest.files?.video) {
+    videoEl.src = 'file:///' + manifest.files.video.replace(/\\/g, '/');
+    videoInfo.textContent = manifest.files.video;
+  }
+
+  // Cover preview
+  const coverEl = document.getElementById('reviewCover');
+  if (manifest.files?.cover) {
+    coverEl.src = 'file:///' + manifest.files.cover.replace(/\\/g, '/');
+  }
+
+  // Duration
+  if (manifest.duration) {
+    videoInfo.textContent = `${manifest.duration.total}s / ${manifest.config?.label || ''}`;
+  }
+
+  // Pipeline stages
+  setPipelineStage('script', 'done');
+  setPipelineStage('video', 'done');
+  setPipelineStage('voice', manifest.task?.voiceover ? 'done' : 'idle');
+  setPipelineStage('subs', 'done');
+  setPipelineStage('render', 'done');
+  setPipelineStage('cover', 'done');
+  setPipelineStage('texts', 'done');
+  setPipelineStage('approve', manifest.status === 'pending_approval' ? 'wip' : 'done');
+  setPipelineStage('publish', manifest.status === 'published' ? 'done' : 'idle');
+
+  window._currentManifest = manifest;
+}
+
+function approveAndPublish() {
+  const publishCmd = 'cd C:\\Users\\danti\\Projects\\ma-content-studio\nnode scripts/full-pipeline.js --publish';
+
+  showModal(
+    'Одобрено!',
+    'Выполните команду для копирования файлов в Google Drive Publish:',
+    publishCmd
+  );
+
+  setPipelineStage('approve', 'done');
+  setPipelineStage('publish', 'wip');
+  showToast('Одобрено! Скопируйте команду публикации.');
+}
+
+function rejectReview() {
+  if (window._currentManifest) {
+    window._currentManifest.status = 'rejected';
+    localStorage.setItem('ma_manifest', JSON.stringify(window._currentManifest));
+    showReview(window._currentManifest);
+  }
+
+  setPipelineStage('approve', 'error');
+  showToast('Отклонено. Переделайте и запустите pipeline заново.');
 }
 
 /* ═══ BLOCK 2: UPLOAD ═══ */
@@ -1321,18 +1559,9 @@ function copyDesc(id, btn) {
   });
 }
 
-/* ═══ BLOCK 5: PUBLISH ═══ */
-function publishYouTube() {
-  showToast('Публикация через N8N: копирование в Publish...');
-}
-
-function publishAll() {
-  showToast('Публикация всех готовых видео в YouTube...');
-}
-
 /* ═══ INIT ═══ */
-// Set initial pipeline state
-// All idle by default — stages update as user progresses
+// Load manifest from localStorage if available
+loadManifest();
 
 </script>
 </body>
