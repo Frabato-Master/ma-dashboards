@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MA Studio">
+<meta name="theme-color" content="#0A0E17">
+<title>MA Content Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep: #0A0E17;
+  --deep2: #111827;
+  --card: #151B28;
+  --border: rgba(255,255,255,0.08);
+  --t1: #F0EDE6;
+  --t2: #9CA3AF;
+  --t3: #6B7280;
+  --gold: #C9A55A;
+  --gold-dim: rgba(201,165,90,0.15);
+  --sage: #8BAF9F;
+  --sage-dim: rgba(139,175,159,0.12);
+  --rose: #C27D72;
+  --rose-dim: rgba(194,125,114,0.12);
+  --ice: #A8C8E8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--deep);
+  color: var(--t1);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ═══ LAYOUT ═══ */
+.dashboard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--t1);
+}
+
+.header h1 span { color: var(--gold); }
+
+.header-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--t3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.grid-1 {
+  margin-bottom: 24px;
+}
+
+/* ═══ CARD ═══ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold);
+}
+
+.card.accent-sage::before { background: var(--sage); }
+.card.accent-rose::before { background: var(--rose); }
+.card.accent-ice::before { background: var(--ice); }
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-title .icon-wrap {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-title .icon-wrap.gold { background: var(--gold-dim); }
+.card-title .icon-wrap.sage { background: var(--sage-dim); }
+.card-title .icon-wrap.rose { background: var(--rose-dim); }
+.card-title .icon-wrap.ice { background: rgba(168,200,232,0.12); }
+
+.card-title .icon-wrap svg {
+  width: 18px; height: 18px;
+}
+
+/* ═══ FORM ELEMENTS ═══ */
+.field { margin-bottom: 16px; }
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 6px;
+}
+
+.field input[type="text"],
+.field textarea {
+  width: 100%;
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--t1);
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.field input[type="text"]:focus,
+.field textarea:focus {
+  border-color: var(--gold);
+}
+
+.field textarea { resize: vertical; min-height: 80px; }
+
+.field-hint {
+  font-size: 11px;
+  color: var(--t3);
+  margin-top: 4px;
+}
+
+/* Radio group */
+.radio-group {
+  display: flex;
+  gap: 12px;
+}
+
+.radio-option {
+  flex: 1;
+  position: relative;
+}
+
+.radio-option input { display: none; }
+
+.radio-option label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t2);
+  cursor: pointer;
+  transition: all 0.25s;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.radio-option input:checked + label {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+/* Toggle */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.toggle-row span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t2);
+}
+
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.toggle input { display: none; }
+
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background: var(--rose);
+  border-radius: 12px;
+  transition: background 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.toggle input:checked + .toggle-track {
+  background: var(--sage);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
+}
+
+.toggle input:checked ~ .toggle-thumb {
+  transform: translateX(20px);
+}
+
+/* Buttons */
+.btn-gold {
+  width: 100%;
+  padding: 14px 24px;
+  background: var(--gold);
+  color: var(--deep);
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-gold:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 20px rgba(201,165,90,0.3);
+}
+
+.btn-gold:active { transform: scale(0.98); }
+
+.btn-outline {
+  padding: 10px 18px;
+  background: transparent;
+  color: var(--t2);
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-disabled {
+  padding: 10px 18px;
+  background: var(--deep2);
+  color: var(--t3);
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ═══ DROPZONE ═══ */
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 16px;
+}
+
+.dropzone:hover,
+.dropzone.dragover {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.dropzone svg {
+  width: 36px; height: 36px;
+  stroke: var(--t3);
+  margin-bottom: 8px;
+}
+
+.dropzone p {
+  font-size: 13px;
+  color: var(--t3);
+}
+
+.dropzone .file-name {
+  font-size: 12px;
+  color: var(--gold);
+  margin-top: 8px;
+  display: none;
+}
+
+.dropzone.has-file .file-name { display: block; }
+.dropzone.has-file svg { stroke: var(--sage); }
+.dropzone.has-file p { color: var(--sage); }
+
+/* ═══ BATCH TABLE ═══ */
+.batch-input { margin-bottom: 16px; }
+
+.batch-table {
+  width: 100%;
+  border-collapse: collapse;
+  display: none;
+}
+
+.batch-table.visible { display: table; }
+
+.batch-table th {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.batch-table td {
+  font-size: 13px;
+  color: var(--t2);
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+}
+
+.batch-table td:first-child {
+  font-weight: 700;
+  color: var(--t1);
+  width: 40px;
+}
+
+.status-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 18px;
+  font-size: 11px;
+  margin-right: 4px;
+}
+
+.status-plan { background: var(--deep2); border: 1px solid var(--border); }
+.status-wip { background: var(--gold-dim); border: 1px solid var(--gold); }
+.status-done { background: var(--sage-dim); border: 1px solid var(--sage); }
+.status-pub { background: rgba(168,200,232,0.12); border: 1px solid var(--ice); }
+
+/* ═══ DESCRIPTIONS ═══ */
+.desc-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.desc-tab {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.desc-tab.active {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.desc-platform { margin-bottom: 16px; }
+
+.desc-platform .platform-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.desc-platform .platform-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.desc-platform .char-count {
+  font-size: 11px;
+  color: var(--t3);
+  font-weight: 500;
+}
+
+.desc-platform .char-count.warn { color: var(--rose); }
+
+.desc-platform textarea {
+  width: 100%;
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--t1);
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  min-height: 100px;
+  resize: vertical;
+  outline: none;
+}
+
+.desc-platform textarea:focus { border-color: var(--gold); }
+
+.btn-copy {
+  padding: 5px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--t3);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  font-family: 'Manrope', sans-serif;
+}
+
+.btn-copy:hover { color: var(--gold); border-color: var(--gold); }
+.btn-copy.copied { color: var(--sage); border-color: var(--sage); }
+
+/* ═══ FILES TABLE ═══ */
+.files-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.files-table th {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.files-table td {
+  font-size: 13px;
+  color: var(--t2);
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.files-table .status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.files-table .badge-ready {
+  background: var(--sage-dim);
+  color: var(--sage);
+}
+
+.files-table .badge-pending {
+  background: var(--gold-dim);
+  color: var(--gold);
+}
+
+.publish-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* ═══ PIPELINE ═══ */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.pipe-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 90px;
+  flex-shrink: 0;
+}
+
+.pipe-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border);
+  background: var(--deep);
+  transition: all 0.3s;
+}
+
+.pipe-dot svg { width: 16px; height: 16px; }
+
+.pipe-dot.idle { border-color: var(--t3); }
+.pipe-dot.idle svg { stroke: var(--t3); }
+
+.pipe-dot.wip { border-color: var(--gold); background: var(--gold-dim); }
+.pipe-dot.wip svg { stroke: var(--gold); }
+
+.pipe-dot.done { border-color: var(--sage); background: var(--sage-dim); }
+.pipe-dot.done svg { stroke: var(--sage); }
+
+.pipe-dot.error { border-color: var(--rose); background: var(--rose-dim); }
+.pipe-dot.error svg { stroke: var(--rose); }
+
+.pipe-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--t3);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.pipe-arrow {
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 24px;
+}
+
+.pipe-arrow svg {
+  width: 16px; height: 16px;
+  stroke: var(--t3);
+  opacity: 0.4;
+}
+
+/* ═══ LINKS ═══ */
+.links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--t2);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.25s;
+}
+
+.link-item:hover {
+  border-color: var(--gold);
+  color: var(--t1);
+  transform: scale(1.02);
+}
+
+.link-item svg {
+  width: 16px; height: 16px;
+  stroke: var(--gold);
+  flex-shrink: 0;
+}
+
+/* ═══ FOOTER ═══ */
+.footer {
+  text-align: center;
+  padding: 40px 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--t3);
+}
+
+.footer span { color: var(--gold); font-weight: 700; }
+
+/* ═══ TOAST ═══ */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  padding: 12px 24px;
+  background: var(--card);
+  border: 1px solid var(--sage);
+  border-radius: 10px;
+  color: var(--sage);
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 9999;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .links-grid { grid-template-columns: 1fr; }
+  .pipeline { justify-content: flex-start; }
+}
+
+@media (max-width: 600px) {
+  .dashboard { padding: 16px 12px 48px; }
+  .header h1 { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .card { padding: 20px 16px; }
+  .btn-gold { min-height: 48px; font-size: 13px; }
+  .btn-outline { min-height: 48px; }
+  .radio-option label { min-height: 44px; font-size: 13px; }
+  .toggle { width: 50px; height: 28px; }
+  .toggle-thumb { width: 22px; height: 22px; }
+  .toggle input:checked ~ .toggle-thumb { transform: translateX(22px); }
+  .link-item { min-height: 48px; font-size: 14px; }
+  .publish-buttons { flex-direction: column; }
+  .publish-buttons button { min-height: 48px; }
+  .pipe-stage { min-width: 70px; }
+  .pipe-label { font-size: 9px; }
+  .pipe-dot { width: 30px; height: 30px; }
+  .pipe-dot svg { width: 14px; height: 14px; }
+  .pipe-arrow { width: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>MA <span>Content Studio</span></h1>
+      <div class="header-sub">Mental Architect 4.0</div>
+    </div>
+    <div class="header-sub" id="currentDate"></div>
+  </div>
+
+  <!-- ═══ BLOCK 6: PIPELINE ═══ -->
+  <div class="grid-1">
+    <div class="card accent-ice">
+      <div class="card-title">
+        <div class="icon-wrap ice">
+          <svg fill="none" stroke="var(--ice)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4"/></svg>
+        </div>
+        Pipeline
+      </div>
+      <div class="pipeline" id="pipeline">
+        <!-- stages injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BLOCKS 1 + 2 ═══ -->
+  <div class="grid-2">
+
+    <!-- BLOCK 1: IMPULSE VIDEO -->
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-wrap gold">
+          <svg fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        Создать видео
+      </div>
+
+      <div class="field">
+        <label>Тема</label>
+        <input type="text" id="impulseTitle" placeholder="Название видео">
+      </div>
+
+      <div class="field">
+        <label>Смысл / описание</label>
+        <textarea id="impulseDesc" rows="4" placeholder="Опиши идею — агент развернёт в полный сценарий"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Тема оформления</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="impulseTheme" id="themeLight" value="light" checked>
+            <label for="themeLight">Light</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="impulseTheme" id="themeDark" value="dark">
+            <label for="themeDark">Dark</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Формат</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="impulseFormat" id="formatReel" value="reel_9x16" checked>
+            <label for="formatReel">Reel 9:16</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="impulseFormat" id="formatYT" value="youtube_16x9">
+            <label for="formatYT">YouTube 16:9</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <span>Озвучка ElevenLabs</span>
+        <label class="toggle">
+          <input type="checkbox" id="impulseVoice" checked>
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+
+      <button class="btn-gold" onclick="createImpulse()">
+        <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="16" height="16"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Создать
+      </button>
+    </div>
+
+    <!-- BLOCK 2: MY VIDEO -->
+    <div class="card accent-sage">
+      <div class="card-title">
+        <div class="icon-wrap sage">
+          <svg fill="none" stroke="var(--sage)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        Загрузить моё видео
+      </div>
+
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p>Перетащите видео сюда или нажмите</p>
+        <div class="file-name" id="fileName"></div>
+        <input type="file" id="fileInput" accept="video/*" style="display:none" onchange="handleFile(this)">
+      </div>
+
+      <div class="field">
+        <label>Название видео</label>
+        <input type="text" id="uploadTitle" placeholder="Название для публикации">
+      </div>
+
+      <div class="toggle-row">
+        <span>Добавить субтитры</span>
+        <label class="toggle">
+          <input type="checkbox" id="uploadSubs" checked>
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>Озвучка ElevenLabs</span>
+        <label class="toggle">
+          <input type="checkbox" id="uploadVoice">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>Генерировать обложку</span>
+        <label class="toggle">
+          <input type="checkbox" id="uploadCover" checked>
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+
+      <div class="field">
+        <label>Формат</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="uploadFormat" id="upFormatReel" value="reel_9x16" checked>
+            <label for="upFormatReel">Reel 9:16</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="uploadFormat" id="upFormatYT" value="youtube_16x9">
+            <label for="upFormatYT">YouTube 16:9</label>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-gold" onclick="processUpload()">
+        <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Обработать и опубликовать
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ BLOCK 3: BATCH ═══ -->
+  <div class="grid-1">
+    <div class="card accent-rose">
+      <div class="card-title">
+        <div class="icon-wrap rose">
+          <svg fill="none" stroke="var(--rose)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        Контент-план на неделю
+      </div>
+
+      <div class="batch-input">
+        <div class="field">
+          <label>Темы (7 строк = 14 видео)</label>
+          <textarea id="batchPlan" rows="7" placeholder="Вставьте 7 тем — по одной на строку.&#10;Автоматически: утро = light, вечер = dark = 14 видео"></textarea>
+        </div>
+        <button class="btn-gold" onclick="loadBatchPlan()" style="max-width: 240px;">
+          <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Загрузить план
+        </button>
+      </div>
+
+      <table class="batch-table" id="batchTable">
+        <thead>
+          <tr>
+            <th>День</th>
+            <th>Утро (Light)</th>
+            <th>Вечер (Dark)</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody id="batchBody"></tbody>
+      </table>
+
+      <div id="batchActions" style="display:none; margin-top: 16px;">
+        <button class="btn-gold" onclick="createBatch()" style="max-width: 280px;">
+          <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="16" height="16"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Создать пакет (14 видео)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BLOCKS 4 + 5 ═══ -->
+  <div class="grid-2">
+
+    <!-- BLOCK 4: DESCRIPTIONS -->
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-wrap gold">
+          <svg fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        Описания
+      </div>
+
+      <div class="desc-tabs" id="descTabs">
+        <div class="desc-tab active" data-idx="0">Текущее видео</div>
+      </div>
+
+      <div id="descContent">
+        <div class="desc-platform">
+          <div class="platform-header">
+            <span class="platform-label">YouTube</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span class="char-count" id="ytCount">0 / 5000</span>
+              <button class="btn-copy" onclick="copyDesc('ytDesc', this)">Копировать</button>
+            </div>
+          </div>
+          <textarea id="ytDesc" placeholder="Описание для YouTube..." oninput="updateCount('ytDesc','ytCount',5000)"></textarea>
+        </div>
+
+        <div class="desc-platform">
+          <div class="platform-header">
+            <span class="platform-label">Instagram</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span class="char-count" id="igCount">0 / 2200</span>
+              <button class="btn-copy" onclick="copyDesc('igDesc', this)">Копировать</button>
+            </div>
+          </div>
+          <textarea id="igDesc" placeholder="Описание для Instagram..." oninput="updateCount('igDesc','igCount',2200)"></textarea>
+        </div>
+
+        <div class="desc-platform">
+          <div class="platform-header">
+            <span class="platform-label">TikTok</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span class="char-count" id="ttCount">0 / 4000</span>
+              <button class="btn-copy" onclick="copyDesc('ttDesc', this)">Копировать</button>
+            </div>
+          </div>
+          <textarea id="ttDesc" placeholder="Описание для TikTok..." oninput="updateCount('ttDesc','ttCount',4000)"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 5: FILES + PUBLISH -->
+    <div class="card accent-sage">
+      <div class="card-title">
+        <div class="icon-wrap sage">
+          <svg fill="none" stroke="var(--sage)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        Готовые файлы
+      </div>
+
+      <table class="files-table">
+        <thead>
+          <tr>
+            <th>Видео</th>
+            <th>MP4</th>
+            <th>Обложка</th>
+            <th>Тексты</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody id="filesBody">
+          <tr>
+            <td style="color:var(--t3); font-size:12px;" colspan="5">Нет готовых файлов</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="publish-buttons">
+        <button class="btn-gold" onclick="publishYouTube()" style="flex:1;">
+          <svg fill="none" stroke="var(--deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          YouTube
+        </button>
+        <button class="btn-disabled" style="flex:1;" disabled>Instagram</button>
+        <button class="btn-disabled" style="flex:1;" disabled>TikTok</button>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <button class="btn-outline" onclick="publishAll()" style="width:100%;">Опубликовать всё в YouTube</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BLOCK 7: QUICK LINKS ═══ -->
+  <div class="grid-1">
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-wrap gold">
+          <svg fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        Быстрые ссылки
+      </div>
+
+      <div class="links-grid">
+        <a href="https://n8n.frabatomaster.com" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          N8N
+        </a>
+        <a href="https://studio.youtube.com/channel/UCuwVoE3QLL8-17-i3VwyEVQ/videos" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          YouTube Studio
+        </a>
+        <a href="https://cloud.digitalocean.com" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          DigitalOcean
+        </a>
+        <a href="https://instagram.com/masterfrabato" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          Instagram
+        </a>
+        <a href="https://github.com/Frabato-Master" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.tiktok.com/creator" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          TikTok
+        </a>
+        <a href="https://elevenlabs.io" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          ElevenLabs
+        </a>
+        <a href="https://t.me/protorealitymaster" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Telegram
+        </a>
+        <a href="https://cloud.mave.digital/70498" target="_blank" class="link-item">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          Mave Podcast
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Двигаемся дальше. <span>1.61</span>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══ UTILS ═══ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function getRadio(name) {
+  return document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+}
+
+function isChecked(id) {
+  return document.getElementById(id).checked;
+}
+
+/* ═══ DATE ═══ */
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ru-RU', {
+  day: 'numeric', month: 'long', year: 'numeric'
+});
+
+/* ═══ PIPELINE ═══ */
+const pipelineStages = [
+  { id: 'script',  label: 'Сценарий', icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>' },
+  { id: 'video',   label: 'Видео',    icon: '<rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/>' },
+  { id: 'voice',   label: 'Озвучка',  icon: '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/>' },
+  { id: 'subs',    label: 'Субтитры', icon: '<rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 15h4m-4-4h10"/>' },
+  { id: 'render',  label: 'Рендер',   icon: '<polygon points="5 3 19 12 5 21 5 3"/>' },
+  { id: 'cover',   label: 'Обложка',  icon: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
+  { id: 'texts',   label: 'Тексты',   icon: '<line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/>' },
+  { id: 'approve', label: 'Проверка', icon: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' },
+  { id: 'publish', label: 'Публикация', icon: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>' }
+];
+
+const pipeEl = document.getElementById('pipeline');
+pipelineStages.forEach((s, i) => {
+  if (i > 0) {
+    const arrow = document.createElement('div');
+    arrow.className = 'pipe-arrow';
+    arrow.innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+    pipeEl.appendChild(arrow);
+  }
+  const stage = document.createElement('div');
+  stage.className = 'pipe-stage';
+  stage.innerHTML = `
+    <div class="pipe-dot idle" id="pipe-${s.id}">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">${s.icon}</svg>
+    </div>
+    <div class="pipe-label">${s.label}</div>
+  `;
+  pipeEl.appendChild(stage);
+});
+
+function setPipelineStage(id, state) {
+  const dot = document.getElementById('pipe-' + id);
+  if (!dot) return;
+  dot.className = 'pipe-dot ' + state;
+}
+
+/* ═══ BLOCK 1: IMPULSE ═══ */
+function createImpulse() {
+  const title = document.getElementById('impulseTitle').value.trim();
+  const desc = document.getElementById('impulseDesc').value.trim();
+  if (!title) { showToast('Введите тему'); return; }
+
+  const json = {
+    type: 'impulse',
+    title: title,
+    description: desc,
+    theme: getRadio('impulseTheme'),
+    format: getRadio('impulseFormat'),
+    voiceover: isChecked('impulseVoice'),
+    maxDuration: getRadio('impulseFormat') === 'reel_9x16' ? 178 : null,
+    created: new Date().toISOString()
+  };
+
+  navigator.clipboard.writeText(JSON.stringify(json, null, 2))
+    .then(() => showToast('JSON скопирован в буфер'))
+    .catch(() => showToast('Ошибка копирования'));
+
+  setPipelineStage('script', 'wip');
+}
+
+/* ═══ BLOCK 2: UPLOAD ═══ */
+let selectedFile = null;
+
+function handleFile(input) {
+  if (input.files.length > 0) {
+    selectedFile = input.files[0];
+    const dz = document.getElementById('dropzone');
+    const fn = document.getElementById('fileName');
+    fn.textContent = selectedFile.name + ' (' + (selectedFile.size / 1048576).toFixed(1) + ' MB)';
+    dz.classList.add('has-file');
+  }
+}
+
+const dz = document.getElementById('dropzone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  dz.classList.remove('dragover');
+  if (e.dataTransfer.files.length > 0) {
+    document.getElementById('fileInput').files = e.dataTransfer.files;
+    handleFile(document.getElementById('fileInput'));
+  }
+});
+
+function processUpload() {
+  const title = document.getElementById('uploadTitle').value.trim();
+  if (!title) { showToast('Введите название видео'); return; }
+  if (!selectedFile) { showToast('Выберите видеофайл'); return; }
+
+  const json = {
+    type: 'upload',
+    title: title,
+    fileName: selectedFile.name,
+    fileSize: selectedFile.size,
+    subtitles: isChecked('uploadSubs'),
+    voiceover: isChecked('uploadVoice'),
+    cover: isChecked('uploadCover'),
+    format: getRadio('uploadFormat'),
+    created: new Date().toISOString()
+  };
+
+  navigator.clipboard.writeText(JSON.stringify(json, null, 2))
+    .then(() => showToast('JSON скопирован в буфер'))
+    .catch(() => showToast('Ошибка копирования'));
+
+  setPipelineStage('video', 'done');
+  setPipelineStage('subs', isChecked('uploadSubs') ? 'wip' : 'idle');
+  setPipelineStage('cover', isChecked('uploadCover') ? 'wip' : 'idle');
+}
+
+/* ═══ BLOCK 3: BATCH ═══ */
+const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+let batchTopics = [];
+
+function loadBatchPlan() {
+  const raw = document.getElementById('batchPlan').value.trim();
+  if (!raw) { showToast('Вставьте темы'); return; }
+
+  batchTopics = raw.split('\n').map(l => l.trim()).filter(l => l);
+  if (batchTopics.length === 0) { showToast('Нет тем'); return; }
+  while (batchTopics.length < 7) batchTopics.push('');
+
+  const tbody = document.getElementById('batchBody');
+  tbody.innerHTML = '';
+
+  for (let i = 0; i < 7; i++) {
+    const tr = document.createElement('tr');
+    const topic = batchTopics[i] || '—';
+    tr.innerHTML = `
+      <td>${dayNames[i]}</td>
+      <td>${escHtml(topic)}</td>
+      <td>${escHtml(topic)}</td>
+      <td>
+        <span class="status-icon status-plan" title="Light: план"></span>
+        <span class="status-icon status-plan" title="Dark: план"></span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  document.getElementById('batchTable').classList.add('visible');
+  document.getElementById('batchActions').style.display = 'block';
+  showToast(batchTopics.length + ' тем загружено');
+}
+
+function createBatch() {
+  const videos = [];
+  for (let i = 0; i < Math.min(batchTopics.length, 7); i++) {
+    if (!batchTopics[i]) continue;
+    videos.push({
+      day: dayNames[i],
+      title: batchTopics[i],
+      theme: 'light',
+      slot: 'morning',
+      format: 'reel_9x16',
+      voiceover: true,
+      maxDuration: 178
+    });
+    videos.push({
+      day: dayNames[i],
+      title: batchTopics[i],
+      theme: 'dark',
+      slot: 'evening',
+      format: 'reel_9x16',
+      voiceover: true,
+      maxDuration: 178
+    });
+  }
+
+  const json = {
+    type: 'batch',
+    totalVideos: videos.length,
+    videos: videos,
+    created: new Date().toISOString()
+  };
+
+  navigator.clipboard.writeText(JSON.stringify(json, null, 2))
+    .then(() => showToast('Пакет из ' + videos.length + ' видео — JSON скопирован'))
+    .catch(() => showToast('Ошибка копирования'));
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+/* ═══ BLOCK 4: DESCRIPTIONS ═══ */
+function updateCount(textareaId, countId, max) {
+  const len = document.getElementById(textareaId).value.length;
+  const el = document.getElementById(countId);
+  el.textContent = len + ' / ' + max;
+  el.classList.toggle('warn', len > max);
+}
+
+function copyDesc(id, btn) {
+  const text = document.getElementById(id).value;
+  if (!text) { showToast('Описание пустое'); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = 'Скопировано';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.textContent = 'Копировать';
+    }, 2000);
+  });
+}
+
+/* ═══ BLOCK 5: PUBLISH ═══ */
+function publishYouTube() {
+  showToast('Публикация через N8N: копирование в Publish...');
+}
+
+function publishAll() {
+  showToast('Публикация всех готовых видео в YouTube...');
+}
+
+/* ═══ INIT ═══ */
+// Set initial pipeline state
+// All idle by default — stages update as user progresses
+
+</script>
+</body>
+</html>

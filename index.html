@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MA Dashboards">
+<meta name="theme-color" content="#0A0E17">
+<title>MA Dashboards</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep: #0A0E17;
+  --deep2: #111827;
+  --card: #151B28;
+  --border: rgba(255,255,255,0.08);
+  --t1: #F0EDE6;
+  --t2: #9CA3AF;
+  --t3: #6B7280;
+  --gold: #C9A55A;
+  --gold-dim: rgba(201,165,90,0.15);
+  --sage: #8BAF9F;
+  --sage-dim: rgba(139,175,159,0.12);
+  --rose: #C27D72;
+  --rose-dim: rgba(194,125,114,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--deep);
+  color: var(--t1);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.logo h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.logo h1 span { color: var(--gold); }
+
+.logo p {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t3);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.dash-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-decoration: none;
+  color: var(--t1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 200px;
+}
+
+.dash-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.dash-card.active::before { background: var(--gold); }
+.dash-card.soon::before { background: var(--t3); }
+
+.dash-card.active:hover {
+  transform: scale(1.03);
+  border-color: var(--gold);
+  box-shadow: 0 8px 32px rgba(201,165,90,0.15);
+}
+
+.dash-card.soon {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.card-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.card-icon.gold { background: var(--gold-dim); }
+.card-icon.sage { background: var(--sage-dim); }
+.card-icon.rose { background: var(--rose-dim); }
+
+.card-icon svg { width: 28px; height: 28px; }
+
+.dash-card h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.dash-card p {
+  font-size: 12px;
+  color: var(--t3);
+  line-height: 1.5;
+}
+
+.badge-soon {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--t3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.footer {
+  margin-top: 48px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--t3);
+}
+
+.footer span { color: var(--gold); font-weight: 700; }
+
+@media (max-width: 700px) {
+  .cards { grid-template-columns: 1fr; max-width: 400px; }
+  .dash-card { min-height: 160px; padding: 24px 20px; }
+  .dash-card.active:hover { transform: none; }
+  .logo h1 { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <h1>Mental <span>Architect</span></h1>
+  <p>Dashboards</p>
+</div>
+
+<div class="cards">
+  <a href="content-studio/" class="dash-card active">
+    <div class="card-icon gold">
+      <svg fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    </div>
+    <h2>Content Studio</h2>
+    <p>Видео, описания, публикация</p>
+  </a>
+
+  <div class="dash-card soon">
+    <div class="card-icon sage">
+      <svg fill="none" stroke="var(--sage)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    </div>
+    <h2>Инженерия Судьбы</h2>
+    <p>Pipeline, Сферы, Модули</p>
+    <div class="badge-soon">Скоро</div>
+  </div>
+
+  <div class="dash-card soon">
+    <div class="card-icon rose">
+      <svg fill="none" stroke="var(--rose)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div>
+    <h2>Финансист</h2>
+    <p>Аналитика, потоки, планирование</p>
+    <div class="badge-soon">Скоро</div>
+  </div>
+</div>
+
+<div class="footer">
+  Двигаемся дальше. <span>1.61</span>
+</div>
+
+</body>
+</html>
