@@ -769,17 +769,26 @@ body {
       </div>
 
       <div class="field">
-        <label>Формат</label>
+        <label>Длительность</label>
         <div class="radio-group">
           <div class="radio-option">
-            <input type="radio" name="impulseFormat" id="formatReel" value="reel_9x16" checked>
-            <label for="formatReel">Reel 9:16</label>
+            <input type="radio" name="impulseDuration" id="dur3" value="3min" checked>
+            <label for="dur3">До 3 мин</label>
           </div>
           <div class="radio-option">
-            <input type="radio" name="impulseFormat" id="formatYT" value="youtube_16x9">
-            <label for="formatYT">YouTube 16:9</label>
+            <input type="radio" name="impulseDuration" id="dur10" value="10min">
+            <label for="dur10">До 10 мин</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="impulseDuration" id="dur30" value="30min">
+            <label for="dur30">До 30 мин</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="impulseDuration" id="durUnlim" value="unlimited">
+            <label for="durUnlim">Без лимита</label>
           </div>
         </div>
+        <div class="field-hint" id="durationHint">9:16 вертикалка · Shorts · макс 178 сек</div>
       </div>
 
       <div class="toggle-row">
@@ -1123,19 +1132,42 @@ function setPipelineStage(id, state) {
 }
 
 /* ═══ BLOCK 1: IMPULSE ═══ */
+
+// Duration → format/limit mapping
+const DURATION_MAP = {
+  '3min':  { format: 'reel_9x16', maxDuration: 178, hint: '9:16 вертикалка · Shorts · макс 178 сек', pubType: 'shorts' },
+  '10min': { format: 'youtube_16x9', maxDuration: 600, hint: '16:9 горизонталка · YouTube · макс 10 мин', pubType: 'video' },
+  '30min': { format: 'youtube_16x9', maxDuration: 1800, hint: '16:9 горизонталка · YouTube · макс 30 мин', pubType: 'video' },
+  'unlimited': { format: 'youtube_16x9', maxDuration: null, hint: '16:9 горизонталка · YouTube · без лимита', pubType: 'video' }
+};
+
+// Update hint when duration changes
+document.querySelectorAll('input[name="impulseDuration"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const hint = document.getElementById('durationHint');
+    const cfg = DURATION_MAP[radio.value];
+    if (hint && cfg) hint.textContent = cfg.hint;
+  });
+});
+
 function createImpulse() {
   const title = document.getElementById('impulseTitle').value.trim();
   const desc = document.getElementById('impulseDesc').value.trim();
   if (!title) { showToast('Введите тему'); return; }
+
+  const duration = getRadio('impulseDuration');
+  const cfg = DURATION_MAP[duration] || DURATION_MAP['3min'];
 
   const json = {
     type: 'impulse',
     title: title,
     description: desc,
     theme: getRadio('impulseTheme'),
-    format: getRadio('impulseFormat'),
+    duration: duration,
+    format: cfg.format,
+    publishType: cfg.pubType,
     voiceover: isChecked('impulseVoice'),
-    maxDuration: getRadio('impulseFormat') === 'reel_9x16' ? 178 : null,
+    maxDuration: cfg.maxDuration,
     created: new Date().toISOString()
   };
 
@@ -1241,7 +1273,9 @@ function createBatch() {
       title: batchTopics[i],
       theme: 'light',
       slot: 'morning',
+      duration: '3min',
       format: 'reel_9x16',
+      publishType: 'shorts',
       voiceover: true,
       maxDuration: 178
     });
@@ -1250,7 +1284,9 @@ function createBatch() {
       title: batchTopics[i],
       theme: 'dark',
       slot: 'evening',
+      duration: '3min',
       format: 'reel_9x16',
+      publishType: 'shorts',
       voiceover: true,
       maxDuration: 178
     });
